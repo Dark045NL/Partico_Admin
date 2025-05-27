@@ -30,11 +30,15 @@ Deze webapplicatie stelt het back-office team van Matrix Inc. in staat om produc
 
 ---
 
-## ✨ Mijn Special Feature
+## ✨ Onze Special Features
 
-### 🔧 Nog te bepalen
+### 🔧 Jelle Statestiek Pagina voor de beheerder
+### 🔧 Youri zoek functie voor gebruikers, locaties, producten
+### 🔧 Stephan inlogscherm voor de beheerder
+### 🔧 Diégo -
+
 **Beschrijving:**  
-Moet nog Komen
+
 
 ---
 
