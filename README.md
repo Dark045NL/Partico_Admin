@@ -12,8 +12,8 @@ Deze webapplicatie stelt het back-office team van Matrix Inc. in staat om produc
 
 ## 👥 Casusgroep Partico
 
-- 
-- 
+- Jelle Simons
+- Youri Driessen
 - Diégo van Rooij
 - Stephan Bisschop
 
