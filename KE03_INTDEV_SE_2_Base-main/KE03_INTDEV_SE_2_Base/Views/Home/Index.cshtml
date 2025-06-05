@@ -1,28 +1,69 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="alert-info">
-    <p class="p-1">
-        Dit project kun je gebruiken als startpunt voor de groeps inleveropdracht: <a href="https://moodle.zuyd.nl/mod/resource/view.php?id=1262065">KE03_INTDEV_SE_2</a>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Welkom, @User.Identity.Name 👋</h2>
+    </div>
 
-        <ul>
-            <li>Wat ga je maken: Je realiseert samen met je casus groep een webapplicatie, een “admin-achtige” webapplicatie waarbij je gebruik maakt van ASP.NET Core MVC architecture pattern. De belangrijkste hoofdprestatie en functionele eisen van deze applicatie zijn als volgt: Het back-office team van Matrix Inc. kan de producten en bijbehorende data en details beheren in deze webapplicatie, zodat de interne en externe klanten altijd over de juiste informatie beschikken.</li>
-            
-            <li>
-                Hoe ga je dit maken?<br />
-                - Groepsopdracht.<br />
-                - Pas de principes van HCI toe (bijv. Paper prototyping, design principles etc…)<br />
-                - Jullie web applicatie maakt gebruik van het MVC architectural pattern.<br />                
-                - Je werkt met je casusgroep op 1 github repository. Tip: je kunt met branches en pull requests werken<br />
-                - Jullie applicatie maakt gebruik van responsive design, meerdere html elementen en toegepast css styles.<br />
-                - Jullie applicatie maakt gebruik van de aangeleverde data access layer voor een snelle start. Deze mag je zelf uitbreiden of aanpassen indien gewenst.<br />
-            </li>
-            <li>
-                Je krijgt een dal (data access layer) meegeleverd. Qua inhoud is die niet perfect gevuld, maar qua structuur biedt die voldoende om een mooi bestel systeem te kunnen maken. <br />
-                In het voorbeeld wordt nog geen gebruik gemaakt van de repository classes, maar direct van de db context. Het is aan jezelf om aan te passen en te kiezen hoe je dit kunt wil toepassen en/of oplossen.<br />
-                Maar mis je iets, je bent vrij om alles naar wens aan te passen! Ben creatief!
-            </li>
-        </ul>
-    </p>
+    <div class="alert alert-primary">
+        <h5 class="alert-heading">Partico_Admin – Beheerdersportaal voor Matrix Inc.</h5>
+        <p>
+            Beheer producten, klanten, orders en onderdelen vanuit één centrale omgeving.
+            Deze webapplicatie is ontworpen voor het back-office team van Matrix Inc.
+        </p>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">📦 Producten</h5>
+                    <p class="card-text">Bekijk en beheer alle productgegevens.</p>
+                    <a asp-controller="Product" asp-action="Index" class="btn btn-primary">Ga naar producten</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">👥 Klanten</h5>
+                    <p class="card-text">Beheer klantinformatie en -statussen.</p>
+                    <a asp-controller="Customer" asp-action="Index" class="btn btn-primary">Ga naar klanten</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">🛒 Orders</h5>
+                    <p class="card-text">Bekijk geplaatste bestellingen en orderdetails.</p>
+                    <a asp-controller="Order" asp-action="Index" class="btn btn-primary">Ga naar orders</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">🔩 Onderdelen</h5>
+                    <p class="card-text">Beheer technische componenten en onderdelen.</p>
+                    <a asp-controller="Part" asp-action="Index" class="btn btn-primary">Ga naar onderdelen</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">ℹ️ Over deze applicatie</h5>
+            <p>
+                Deze admin webapp is gebouwd als onderdeel van het vak <strong>KE03_INTDEV_SE_2</strong> aan Zuyd Hogeschool.
+                De focus ligt op <strong>beheerfunctionaliteiten</strong> voor Matrix Inc., met toepassing van ASP.NET Core MVC, Razor Views, een responsive ontwerp en een gestructureerde data access layer.
+            </p>
+        </div>
+    </div>
 </div>

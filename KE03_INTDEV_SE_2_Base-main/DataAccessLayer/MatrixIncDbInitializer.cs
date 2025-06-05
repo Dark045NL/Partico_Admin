@@ -1,9 +1,6 @@
 ﻿using DataAccessLayer.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
@@ -11,53 +8,95 @@ namespace DataAccessLayer
     {
         public static void Initialize(MatrixIncDbContext context)
         {
-            // Look for any customers.
-            if (context.Customers.Any())
+            // 👤 Admin-gebruiker met gehasht wachtwoord
+            if (!context.Users.Any())
             {
-                return;   // DB has been seeded
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword("beheer123");
+
+                context.Users.Add(new User
+                {
+                    Username = "admin",
+                    Password = hashedPassword,
+                    Role = "Admin"
+                });
+
+                context.SaveChanges();
             }
 
-            // TODO: Hier moet ik nog wat namen verzinnen die betrekking hebben op de matrix.
-            // - Denk aan de m3 boutjes, moertjes en ringetjes.
-            // - Denk aan namen van schepen
-            // - Denk aan namen van vliegtuigen            
-            var customers = new Customer[]
+            // 👥 Klanten gebaseerd op Matrix-personages
+            if (!context.Customers.Any())
             {
-                new Customer { Name = "Neo", Address = "123 Elm St" , Active=true},
-                new Customer { Name = "Morpheus", Address = "456 Oak St", Active = true },
-                new Customer { Name = "Trinity", Address = "789 Pine St", Active = true }
-            };
-            context.Customers.AddRange(customers);
+                var customers = new Customer[]
+                {
+                    new Customer { Name = "Neo", Address = "123 Elm St", Active = true },
+                    new Customer { Name = "Morpheus", Address = "456 Oak St", Active = true },
+                    new Customer { Name = "Trinity", Address = "789 Pine St", Active = true }
+                };
 
-            var orders = new Order[]
+                context.Customers.AddRange(customers);
+                context.SaveChanges(); // 📌 Nodig vóór orders
+            }
+
+            // 🛒 Orders aan klanten koppelen
+            if (!context.Orders.Any())
             {
-                new Order { Customer = customers[0], OrderDate = DateTime.Parse("2021-01-01")},
-                new Order { Customer = customers[0], OrderDate = DateTime.Parse("2021-02-01")},
-                new Order { Customer = customers[1], OrderDate = DateTime.Parse("2021-02-01")},
-                new Order { Customer = customers[2], OrderDate = DateTime.Parse("2021-03-01")}
-            };  
-            context.Orders.AddRange(orders);
+                var customers = context.Customers.ToList(); // Nu gevuld door vorige SaveChanges()
 
-            var products = new Product[]
+                var orders = new Order[]
+                {
+                    new Order { Customer = customers[0], OrderDate = DateTime.Parse("2021-01-01") },
+                    new Order { Customer = customers[0], OrderDate = DateTime.Parse("2021-02-01") },
+                    new Order { Customer = customers[1], OrderDate = DateTime.Parse("2021-02-01") },
+                    new Order { Customer = customers[2], OrderDate = DateTime.Parse("2021-03-01") }
+                };
+
+                context.Orders.AddRange(orders);
+                context.SaveChanges();
+            }
+
+            // 🛠️ Producten geïnspireerd op de Matrix
+            if (!context.Products.Any())
             {
-                new Product { Name = "Nebuchadnezzar", Description = "Het schip waarop Neo voor het eerst de echte wereld leert kennen", Price = 10000.00m },
-                new Product { Name = "Jack-in Chair", Description = "Stoel met een rugsteun en metalen armen waarin mensen zitten om ingeplugd te worden in de Matrix via een kabel in de nekpoort", Price = 500.50m },
-                new Product { Name = "EMP (Electro-Magnetic Pulse) Device", Description = "Wapentuig op de schepen van Zion", Price = 129.99m }
-            };
-            context.Products.AddRange(products);
+                var products = new Product[]
+                {
+                    new Product
+                    {
+                        Name = "Nebuchadnezzar",
+                        Description = "Hovercraft waarmee Morpheus en crew opereren buiten de Matrix",
+                        Price = 10000.00m
+                    },
+                    new Product
+                    {
+                        Name = "Jack-in Chair",
+                        Description = "Stoel waarmee crewleden ingeplugd worden in de Matrix",
+                        Price = 500.50m
+                    },
+                    new Product
+                    {
+                        Name = "EMP Device",
+                        Description = "Electro-Magnetic Pulse wapen dat Sentinels uitschakelt",
+                        Price = 129.99m
+                    }
+                };
 
-            var parts = new Part[]
+                context.Products.AddRange(products);
+                context.SaveChanges();
+            }
+
+            // 🔩 Onderdelen voor sci-fi toepassingen
+            if (!context.Parts.Any())
             {
-                new Part { Name = "Tandwiel", Description = "Overdracht van rotatie in bijvoorbeeld de motor of luikmechanismen"},
-                new Part { Name = "M5 Boutje", Description = "Bevestiging van panelen, buizen of interne modules"},
-                new Part { Name = "Hydraulische cilinder", Description = "Openen/sluiten van zware luchtsluizen of bewegende onderdelen"},
-                new Part { Name = "Koelvloeistofpomp", Description = "Koeling van de motor of elektronische systemen."}
-            };
-            context.Parts.AddRange(parts);
+                var parts = new Part[]
+                {
+                    new Part { Name = "Tandwiel", Description = "Voor overbrenging van kracht in motoren en deuren" },
+                    new Part { Name = "M5 Boutje", Description = "Bevestigt panelen in hovercrafts zoals de Nebuchadnezzar" },
+                    new Part { Name = "Hydraulische cilinder", Description = "Voor het openen van zware luchtsluizen" },
+                    new Part { Name = "Koelvloeistofpomp", Description = "Koelt energie-units aan boord van schepen" }
+                };
 
-            context.SaveChanges();
-
-            context.Database.EnsureCreated();
+                context.Parts.AddRange(parts);
+                context.SaveChanges();
+            }
         }
     }
 }

@@ -1,0 +1,12 @@
+﻿@model LoginViewModel
+
+<h2>Inloggen</h2>
+<form asp-action="Login" method="post">
+    <label>Gebruikersnaam:</label>
+    <input asp-for="Username" />
+    <label>Wachtwoord:</label>
+    <input asp-for="Password" type="password" />
+    <input type="hidden" asp-for="ReturnUrl" />
+    <button type="submit">Login</button>
+    <div asp-validation-summary="All"></div>
+</form>
