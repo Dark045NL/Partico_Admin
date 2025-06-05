@@ -15,14 +15,14 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             _logger = logger;
         }
 
-        // ?? Alleen toegankelijk voor ingelogde gebruikers met rol "Admin"
+        // Alleen toegankelijk voor ingelogde gebruikers met rol "Admin"
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View();
         }
 
-        // ?? Ook alleen toegankelijk voor Admins
+        // Ook alleen toegankelijk voor Admins
         [Authorize(Roles = "Admin")]
         public IActionResult Privacy()
         {

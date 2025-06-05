@@ -1,0 +1,18 @@
+﻿@model DataAccessLayer.Models.Product
+@{
+    ViewData["Title"] = "Verwijder Product";
+}
+<h1>Verwijderen bevestigen</h1>
+<h4>@Model.Name</h4>
+<p>Weet je zeker dat je dit wilt verwijderen?</p>
+<dl class="row">
+    <dt class="col-sm-2">Beschrijving</dt>
+    <dd class="col-sm-10">@Model.Description</dd>
+    <dt class="col-sm-2">Prijs</dt>
+    <dd class="col-sm-10">€ @Model.Price</dd>
+</dl>
+<form asp-action="DeleteConfirmed">
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Verwijderen" class="btn btn-danger" />
+    <a asp-action="Index" class="btn btn-secondary">Annuleren</a>
+</form>
