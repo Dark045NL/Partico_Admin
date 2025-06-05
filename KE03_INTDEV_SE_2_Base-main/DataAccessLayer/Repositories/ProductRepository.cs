@@ -1,11 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories
 {
@@ -13,7 +8,7 @@ namespace DataAccessLayer.Repositories
     {
         private readonly MatrixIncDbContext _context;
 
-        public ProductRepository(MatrixIncDbContext context) 
+        public ProductRepository(MatrixIncDbContext context)
         {
             _context = context;
         }

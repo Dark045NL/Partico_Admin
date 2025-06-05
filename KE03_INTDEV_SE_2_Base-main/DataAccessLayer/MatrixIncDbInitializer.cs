@@ -1,6 +1,4 @@
 ﻿using DataAccessLayer.Models;
-using System;
-using System.Linq;
 
 namespace DataAccessLayer
 {

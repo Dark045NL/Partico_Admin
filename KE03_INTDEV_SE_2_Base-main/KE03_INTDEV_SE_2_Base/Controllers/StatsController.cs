@@ -1,12 +1,11 @@
+using DataAccessLayer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataAccessLayer;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace KE03_INTDEV_SE_2_Base.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class StatsController : Controller
     {
         private readonly MatrixIncDbContext _context;
@@ -44,4 +43,4 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View();
         }
     }
-} 
+}

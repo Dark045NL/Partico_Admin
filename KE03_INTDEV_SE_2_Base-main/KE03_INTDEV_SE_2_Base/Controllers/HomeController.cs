@@ -1,8 +1,7 @@
-using System.Diagnostics;
 using KE03_INTDEV_SE_2_Base.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace KE03_INTDEV_SE_2_Base.Controllers
 {
