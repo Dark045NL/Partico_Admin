@@ -1,0 +1,308 @@
+@{
+    ViewData["Title"] = "Order Statistics";
+}
+
+<div class="container mt-4">
+    <h2>Order Statistics</h2>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Orders per Customer</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="ordersPerCustomerChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Product Order Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="productStatsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Monthly Order Trends</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="monthlyTrendsChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Revenue Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Order Status Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="orderStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Customer Satisfaction</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="satisfactionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Product Order Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Number of Orders</th>
+                                    <th>Price</th>
+                                    <th>Revenue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var product in ViewBag.ProductStats)
+                                {
+                                    var dummyOrderCount = new Random().Next(10, 60);
+                                    var dummyPrice = Math.Round(new Random().NextDouble() * 1000 + 100, 2);
+                                    var revenue = Math.Round(dummyPrice * dummyOrderCount, 2);
+                                    <tr>
+                                        <td>@product.ProductName</td>
+                                        <td>@dummyOrderCount</td>
+                                        <td>€@dummyPrice.ToString("N2")</td>
+                                        <td>€@revenue.ToString("N2")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Orders per Customer Chart
+        const ordersPerCustomerData = @Html.Raw(Json.Serialize(ViewBag.OrdersPerCustomer));
+        new Chart(document.getElementById('ordersPerCustomerChart'), {
+            type: 'bar',
+            data: {
+                labels: ordersPerCustomerData.map(item => item.customerName),
+                datasets: [{
+                    label: 'Number of Orders',
+                    data: ordersPerCustomerData.map(item => item.orderCount),
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // Product Statistics Chart
+        const productStatsData = @Html.Raw(Json.Serialize(ViewBag.ProductStats));
+        const dummyData = productStatsData.map(() => ({
+            orderCount: Math.floor(Math.random() * 50) + 10,
+            price: Math.round((Math.random() * 1000 + 100) * 100) / 100
+        }));
+
+        new Chart(document.getElementById('productStatsChart'), {
+            type: 'bar',
+            data: {
+                labels: productStatsData.map(item => item.productName),
+                datasets: [{
+                    label: 'Number of Orders',
+                    data: dummyData.map(item => item.orderCount),
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 5,
+                            callback: function(value) {
+                                return '€' + value.toLocaleString('en-US', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Monthly Trends Chart
+        const monthlyData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Orders',
+                data: [45, 52, 38, 45, 58, 62],
+                borderColor: 'rgba(153, 102, 255, 1)',
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                tension: 0.4
+            }]
+        };
+        new Chart(document.getElementById('monthlyTrendsChart'), {
+            type: 'line',
+            data: monthlyData,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Revenue Chart
+        const revenueData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Revenue (€)',
+                data: [12500, 15000, 11000, 13500, 16500, 18000],
+                backgroundColor: 'rgba(255, 159, 64, 0.5)',
+                borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 1
+            }]
+        };
+        new Chart(document.getElementById('revenueChart'), {
+            type: 'bar',
+            data: revenueData,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '€' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Order Status Chart
+        const orderStatusData = {
+            labels: ['Completed', 'Processing', 'Shipped', 'Cancelled'],
+            datasets: [{
+                data: [65, 20, 10, 5],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 99, 132, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+        new Chart(document.getElementById('orderStatusChart'), {
+            type: 'doughnut',
+            data: orderStatusData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Customer Satisfaction Chart
+        const satisfactionData = {
+            labels: ['5 Stars', '4 Stars', '3 Stars', '2 Stars', '1 Star'],
+            datasets: [{
+                data: [45, 30, 15, 7, 3],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(255, 159, 64, 0.5)',
+                    'rgba(255, 99, 132, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+        new Chart(document.getElementById('satisfactionChart'), {
+            type: 'pie',
+            data: satisfactionData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+} 
