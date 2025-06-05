@@ -1,0 +1,55 @@
+@model KE03_INTDEV_SE_2_Base.Models.SearchViewModel
+
+<div class="search-container">
+    <div class="input-group">
+        <input type="text" id="searchInput" class="form-control" placeholder="Zoek producten, klanten of onderdelen..." 
+               autocomplete="off" data-search-url="@Url.Action("Search", "Search")">
+        <button class="btn btn-outline-secondary" type="button" id="searchButton">
+            <i class="bi bi-search"></i>
+        </button>
+    </div>
+    <div id="searchResults" class="search-results-dropdown d-none">
+        <div class="list-group">
+            <!-- Results will be populated here via JavaScript -->
+        </div>
+    </div>
+</div>
+
+<style>
+    .search-container {
+        position: relative;
+        min-width: 400px;
+        width: 100%;
+        max-width: 600px;
+    }
+    
+    .search-results-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: white;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: 0.25rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    .search-result-item {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+    }
+    
+    .search-result-item:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .search-result-type {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-left: auto;
+    }
+</style> 
