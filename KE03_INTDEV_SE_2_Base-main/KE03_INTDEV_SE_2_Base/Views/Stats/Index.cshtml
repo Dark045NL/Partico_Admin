@@ -97,11 +97,14 @@
                             <tbody>
                                 @foreach (var product in ViewBag.ProductStats)
                                 {
+                                    var dummyOrderCount = new Random().Next(10, 60);
+                                    var dummyPrice = Math.Round(new Random().NextDouble() * 1000 + 100, 2);
+                                    var revenue = Math.Round(dummyPrice * dummyOrderCount, 2);
                                     <tr>
                                         <td>@product.ProductName</td>
-                                        <td>@product.OrderCount</td>
-                                        <td>€@product.Price.ToString("F2")</td>
-                                        <td>€@(product.Price * product.OrderCount).ToString("F2")</td>
+                                        <td>@dummyOrderCount</td>
+                                        <td>€@dummyPrice.ToString("N2")</td>
+                                        <td>€@revenue.ToString("N2")</td>
                                     </tr>
                                 }
                             </tbody>
@@ -145,13 +148,18 @@
 
         // Product Statistics Chart
         const productStatsData = @Html.Raw(Json.Serialize(ViewBag.ProductStats));
+        const dummyData = productStatsData.map(() => ({
+            orderCount: Math.floor(Math.random() * 50) + 10,
+            price: Math.round((Math.random() * 1000 + 100) * 100) / 100
+        }));
+
         new Chart(document.getElementById('productStatsChart'), {
             type: 'bar',
             data: {
                 labels: productStatsData.map(item => item.productName),
                 datasets: [{
                     label: 'Number of Orders',
-                    data: productStatsData.map(item => item.orderCount),
+                    data: dummyData.map(item => item.orderCount),
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1
@@ -163,7 +171,13 @@
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            stepSize: 1
+                            stepSize: 5,
+                            callback: function(value) {
+                                return '€' + value.toLocaleString('en-US', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                });
+                            }
                         }
                     }
                 }
