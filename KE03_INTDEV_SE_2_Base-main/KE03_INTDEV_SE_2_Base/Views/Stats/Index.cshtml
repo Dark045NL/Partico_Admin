@@ -1,0 +1,123 @@
+@{
+    ViewData["Title"] = "Order Statistics";
+}
+
+<div class="container mt-4">
+    <h2>Order Statistics</h2>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Orders per Customer</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="ordersPerCustomerChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Product Order Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="productStatsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Product Order Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Number of Orders</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var product in ViewBag.ProductStats)
+                                {
+                                    <tr>
+                                        <td>@product.ProductName</td>
+                                        <td>@product.OrderCount</td>
+                                        <td>€@product.Price.ToString("F2")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Orders per Customer Chart
+        const ordersPerCustomerData = @Html.Raw(Json.Serialize(ViewBag.OrdersPerCustomer));
+        new Chart(document.getElementById('ordersPerCustomerChart'), {
+            type: 'bar',
+            data: {
+                labels: ordersPerCustomerData.map(item => item.customerName),
+                datasets: [{
+                    label: 'Number of Orders',
+                    data: ordersPerCustomerData.map(item => item.orderCount),
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // Product Statistics Chart
+        const productStatsData = @Html.Raw(Json.Serialize(ViewBag.ProductStats));
+        new Chart(document.getElementById('productStatsChart'), {
+            type: 'bar',
+            data: {
+                labels: productStatsData.map(item => item.productName),
+                datasets: [{
+                    label: 'Number of Orders',
+                    data: productStatsData.map(item => item.orderCount),
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+} 
