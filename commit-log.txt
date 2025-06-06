@@ -1,0 +1,26 @@
+6e2b784 - Dark045 - Updatename
+c45f9dd - Dark045 - Merge branch 'main' of https://github.com/Dark045NL/Partico_Admin
+a8fba1d - Dark045 - Update Searchbar
+1d8c948 - Stephan Bisschop - Update README.md
+a21de3a - Stephan Bisschop - Merge pull request #4 from Dark045NL/Youri
+7061adb - Youri-Driessen - Client-side zoekfunctionaliteit toegevoegd aan site.js
+87244f5 - Youri-Driessen - Zoekbalk toegevoegd aan layout
+c1ec6a8 - Youri-Driessen - SearchController
+bf42717 - Youri-Driessen - SearchViewModel
+45e67d8 - Dark045 - Clean Code applied en Security op stats
+b47c7fb - Jelle S - Merge
+4315b2a - Jelle S - fix more styling
+cbb5e19 - Jelle S - styling
+d28a8a4 - Jelle S - stats page
+e8a0bfd - Dark045 - Volledige Inzicht admin toegevoed
+212d657 - Dark045 - Login systeem
+e4c3c3c - Dark045 - Update zonder de extra pagina's
+02b3e9d - Dark045 - geen idee
+35a0a9d - Stephan Bisschop - Merge pull request #1 from Dark045NL/johnny
+158c9e0 - Dark045 - Upload
+bc00d25 - Stephan Bisschop - Update README.md
+a6e0bac - Stephan Bisschop - Update README.md
+913eff5 - Stephan Bisschop - Update README.md
+2399a11 - Stephan Bisschop - Create README.md
+375667a - Dark045 - Basis Upload van Admin panel
+5d8f7f8 - Dark045 - Initial commit
