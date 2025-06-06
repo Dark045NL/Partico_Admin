@@ -1,15 +1,15 @@
 @{
-    ViewData["Title"] = "Order Statistics";
+    ViewData["Title"] = "Bestellingsstatistieken";
 }
 
 <div class="container mt-4">
-    <h2>Order Statistics</h2>
+    <h2>Bestellingsstatistieken</h2>
     
     <div class="row mt-4">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Orders per Customer</h5>
+                    <h5>Bestellingen per Klant</h5>
                 </div>
                 <div class="card-body">
                     <canvas id="ordersPerCustomerChart"></canvas>
@@ -20,7 +20,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Product Order Statistics</h5>
+                    <h5>Product Bestellingsstatistieken</h5>
                 </div>
                 <div class="card-body">
                     <canvas id="productStatsChart"></canvas>
@@ -33,7 +33,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Monthly Order Trends</h5>
+                    <h5>Maandelijkse Bestellingstrends</h5>
                 </div>
                 <div class="card-body">
                     <canvas id="monthlyTrendsChart"></canvas>
@@ -44,7 +44,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Revenue Statistics</h5>
+                    <h5>Omzetstatistieken</h5>
                 </div>
                 <div class="card-body">
                     <canvas id="revenueChart"></canvas>
@@ -57,7 +57,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Order Status Distribution</h5>
+                    <h5>Bestellingsstatus Verdeling</h5>
                 </div>
                 <div class="card-body">
                     <canvas id="orderStatusChart"></canvas>
@@ -68,7 +68,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5>Customer Satisfaction</h5>
+                    <h5>Klanttevredenheid</h5>
                 </div>
                 <div class="card-body">
                     <canvas id="satisfactionChart"></canvas>
@@ -81,17 +81,17 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Product Order Details</h5>
+                    <h5>Product Bestellingsdetails</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Product Name</th>
-                                    <th>Number of Orders</th>
-                                    <th>Price</th>
-                                    <th>Revenue</th>
+                                    <th>Productnaam</th>
+                                    <th>Aantal Bestellingen</th>
+                                    <th>Prijs</th>
+                                    <th>Omzet</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -126,7 +126,7 @@
             data: {
                 labels: ordersPerCustomerData.map(item => item.customerName),
                 datasets: [{
-                    label: 'Number of Orders',
+                    label: 'Aantal Bestellingen',
                     data: ordersPerCustomerData.map(item => item.orderCount),
                     backgroundColor: 'rgba(54, 162, 235, 0.5)',
                     borderColor: 'rgba(54, 162, 235, 1)',
@@ -158,7 +158,7 @@
             data: {
                 labels: productStatsData.map(item => item.productName),
                 datasets: [{
-                    label: 'Number of Orders',
+                    label: 'Aantal Bestellingen',
                     data: dummyData.map(item => item.orderCount),
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderColor: 'rgba(75, 192, 192, 1)',
@@ -173,7 +173,7 @@
                         ticks: {
                             stepSize: 5,
                             callback: function(value) {
-                                return '€' + value.toLocaleString('en-US', {
+                                return '€' + value.toLocaleString('nl-NL', {
                                     minimumFractionDigits: 2,
                                     maximumFractionDigits: 2
                                 });
@@ -186,9 +186,9 @@
 
         // Monthly Trends Chart
         const monthlyData = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            labels: ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun'],
             datasets: [{
-                label: 'Orders',
+                label: 'Bestellingen',
                 data: [45, 52, 38, 45, 58, 62],
                 borderColor: 'rgba(153, 102, 255, 1)',
                 backgroundColor: 'rgba(153, 102, 255, 0.2)',
@@ -210,9 +210,9 @@
 
         // Revenue Chart
         const revenueData = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            labels: ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun'],
             datasets: [{
-                label: 'Revenue (€)',
+                label: 'Omzet (€)',
                 data: [12500, 15000, 11000, 13500, 16500, 18000],
                 backgroundColor: 'rgba(255, 159, 64, 0.5)',
                 borderColor: 'rgba(255, 159, 64, 1)',
@@ -229,7 +229,7 @@
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
-                                return '€' + value.toLocaleString();
+                                return '€' + value.toLocaleString('nl-NL');
                             }
                         }
                     }
@@ -239,7 +239,7 @@
 
         // Order Status Chart
         const orderStatusData = {
-            labels: ['Completed', 'Processing', 'Shipped', 'Cancelled'],
+            labels: ['Voltooid', 'In Verwerking', 'Verzonden', 'Geannuleerd'],
             datasets: [{
                 data: [65, 20, 10, 5],
                 backgroundColor: [
@@ -272,7 +272,7 @@
 
         // Customer Satisfaction Chart
         const satisfactionData = {
-            labels: ['5 Stars', '4 Stars', '3 Stars', '2 Stars', '1 Star'],
+            labels: ['5 Sterren', '4 Sterren', '3 Sterren', '2 Sterren', '1 Ster'],
             datasets: [{
                 data: [45, 30, 15, 7, 3],
                 backgroundColor: [
