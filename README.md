@@ -37,8 +37,6 @@ Deze webapplicatie stelt het back-office team van Matrix Inc. in staat om produc
 ### 🔧 Stephan inlogscherm voor de beheerder
 ### 🔧 Diégo -
 
-**Beschrijving:**  
-
 
 ---
 
