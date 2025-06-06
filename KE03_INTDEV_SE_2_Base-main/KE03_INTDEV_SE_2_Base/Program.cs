@@ -26,6 +26,7 @@ namespace KE03_INTDEV_SE_2_Base
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IPartRepository, PartRepository>();
 
+
             // Authentication & Authorization (cookies)
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>

@@ -1,24 +1,26 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Interfaces;
 using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace KE03_INTDEV_SE_2_Base.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class OrderController : Controller
     {
+        private readonly IOrderRepository _orderRepo;
         private readonly MatrixIncDbContext _context;
 
-        public OrderController(MatrixIncDbContext context)
+        public OrderController(IOrderRepository orderRepo, MatrixIncDbContext context)
         {
+            _orderRepo = orderRepo;
             _context = context;
         }
 
         public IActionResult Index()
         {
-            var orders = _context.Orders.Include(o => o.Customer).ToList();
+            var orders = _orderRepo.GetAllOrders();
             return View(orders);
         }
 
@@ -26,7 +28,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         {
             if (id == null) return NotFound();
 
-            var order = _context.Orders.Include(o => o.Customer).FirstOrDefault(o => o.Id == id);
+            var order = _orderRepo.GetOrderById(id.Value);
             if (order == null) return NotFound();
 
             return View(order);
@@ -37,26 +39,34 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             ViewBag.Customers = _context.Customers.ToList();
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Order order)
         {
-            if (ModelState.IsValid)
+
+            ModelState.Remove(nameof(order.Customer));
+            ModelState.Remove(nameof(order.Products));
+
+            if (!ModelState.IsValid)
             {
-                _context.Orders.Add(order);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine("ModelState Error: " + error.ErrorMessage);
+                }
+
+                ViewBag.Customers = _context.Customers.ToList();
+                return View(order);
             }
-            ViewBag.Customers = _context.Customers.ToList();
-            return View(order);
+
+            _orderRepo.AddOrder(order);
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Edit(int? id)
         {
             if (id == null) return NotFound();
 
-            var order = _context.Orders.Find(id);
+            var order = _orderRepo.GetOrderById(id.Value);
             if (order == null) return NotFound();
 
             ViewBag.Customers = _context.Customers.ToList();
@@ -71,10 +81,10 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Update(order);
-                _context.SaveChanges();
+                _orderRepo.UpdateOrder(order);
                 return RedirectToAction(nameof(Index));
             }
+
             ViewBag.Customers = _context.Customers.ToList();
             return View(order);
         }
@@ -83,7 +93,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         {
             if (id == null) return NotFound();
 
-            var order = _context.Orders.Include(o => o.Customer).FirstOrDefault(o => o.Id == id);
+            var order = _orderRepo.GetOrderById(id.Value);
             if (order == null) return NotFound();
 
             return View(order);
@@ -93,11 +103,10 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var order = _context.Orders.Find(id);
+            var order = _orderRepo.GetOrderById(id);
             if (order != null)
             {
-                _context.Orders.Remove(order);
-                _context.SaveChanges();
+                _orderRepo.DeleteOrder(order);
             }
             return RedirectToAction(nameof(Index));
         }

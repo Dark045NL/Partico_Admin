@@ -1,18 +1,17 @@
 ﻿@model DataAccessLayer.Models.Order
+
 @{
     ViewData["Title"] = "Verwijder bestelling";
 }
-<h1>Bestelling verwijderen</h1>
-<h4>Weet je zeker dat je deze bestelling wilt verwijderen?</h4>
-<dl class="row">
-    <dt class="col-sm-2">Datum</dt>
-    <dd class="col-sm-10">@Model.OrderDate.ToShortDateString()</dd>
 
-    <dt class="col-sm-2">Klant</dt>
-    <dd class="col-sm-10">@Model.Customer.Name</dd>
-</dl>
-<form asp-action="DeleteConfirmed">
+<h1>Weet je zeker dat je deze bestelling wilt verwijderen?</h1>
+
+<div>
+    <h4>Order van @Model.Customer.Name op @Model.OrderDate.ToShortDateString()</h4>
+</div>
+
+<form asp-action="Delete" method="post">
     <input type="hidden" asp-for="Id" />
-    <input type="submit" value="Verwijder" class="btn btn-danger" />
+    <button type="submit" class="btn btn-danger">Verwijder</button>
     <a asp-action="Index" class="btn btn-secondary">Annuleer</a>
 </form>

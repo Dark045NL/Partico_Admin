@@ -1,4 +1,7 @@
-﻿namespace DataAccessLayer.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+
+namespace DataAccessLayer.Models
 {
     public class Order
     {
@@ -12,4 +15,5 @@
 
         public ICollection<Product> Products { get; } = new List<Product>();
     }
+
 }
