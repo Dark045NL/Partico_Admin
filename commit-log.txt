@@ -1,3 +1,9 @@
+52157fa - Dark045 - Update styling
+1229580 - Dark045 - update en fix edit en active modifier
+fb6b1be - Dark045 - Merge branch 'main' of https://github.com/Dark045NL/Partico_Admin
+7dc766d - Dark045 - Fix voor Delete en Create
+84e4a96 - Jelle S - Stats pagina vertaald naar Nederlands
+0b98156 - Dark045 - Upload git commit bestand
 6e2b784 - Dark045 - Updatename
 c45f9dd - Dark045 - Merge branch 'main' of https://github.com/Dark045NL/Partico_Admin
 a8fba1d - Dark045 - Update Searchbar
