@@ -1,12 +1,12 @@
+using DataAccessLayer;
+using KE03_INTDEV_SE_2_Base.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using KE03_INTDEV_SE_2_Base.Models;
-using System.Linq;
-using System.Threading.Tasks;
-using DataAccessLayer;
 
 namespace KE03_INTDEV_SE_2_Base.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class SearchController : Controller
     {
         private readonly MatrixIncDbContext _context;
@@ -70,4 +70,4 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return Json(new { results });
         }
     }
-} 
+}

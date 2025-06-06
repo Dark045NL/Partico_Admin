@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace KE03_INTDEV_SE_2_Base.Models
 {
     public class SearchViewModel
@@ -15,4 +13,4 @@ namespace KE03_INTDEV_SE_2_Base.Models
         public string Type { get; set; }  // "Product", "Klant", or "Onderdeel"
         public string Url { get; set; }
     }
-} 
+}
