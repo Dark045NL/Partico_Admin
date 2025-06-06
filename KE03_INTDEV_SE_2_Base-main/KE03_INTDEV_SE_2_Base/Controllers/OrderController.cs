@@ -79,14 +79,18 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         {
             if (id != order.Id) return NotFound();
 
-            if (ModelState.IsValid)
+            // Exclude properties that won't be bound via the form
+            ModelState.Remove(nameof(order.Customer));
+            ModelState.Remove(nameof(order.Products));
+
+            if (!ModelState.IsValid)
             {
-                _orderRepo.UpdateOrder(order);
-                return RedirectToAction(nameof(Index));
+                ViewBag.Customers = _context.Customers.ToList();
+                return View(order);
             }
 
-            ViewBag.Customers = _context.Customers.ToList();
-            return View(order);
+            _orderRepo.UpdateOrder(order);
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Delete(int? id)

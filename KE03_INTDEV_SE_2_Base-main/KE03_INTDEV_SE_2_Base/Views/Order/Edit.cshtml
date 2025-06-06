@@ -3,7 +3,7 @@
     ViewData["Title"] = "Bewerk bestelling";
 }
 
-<h1>Bestelling bewerken</h1>
+<h1>Bewerk bestelling</h1>
 
 <div class="row">
     <div class="col-md-6">
@@ -19,14 +19,15 @@
 
             <div class="form-group mb-3">
                 <label asp-for="CustomerId" class="form-label">Klant</label>
-                <select asp-for="CustomerId" class="form-control" asp-items="@(new SelectList(ViewBag.Customers, "Id", "Name"))">
+                <select asp-for="CustomerId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.Customers, "Id", "Name"))">
                     <option value="">-- Selecteer klant --</option>
                 </select>
                 <span asp-validation-for="CustomerId" class="text-danger"></span>
             </div>
 
             <button type="submit" class="btn btn-primary">Opslaan</button>
-            <a asp-action="Index" class="btn btn-secondary">Annuleer</a>
+            <a asp-action="Index" class="btn btn-secondary">Annuleren</a>
         </form>
     </div>
 </div>
