@@ -17,14 +17,12 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             _context = context;
         }
 
-        // GET: Customer
         public IActionResult Index()
         {
             var customers = _context.Customers.ToList();
             return View(customers);
         }
 
-        // GET: Customer/Details/5
         public IActionResult Details(int? id)
         {
             if (id == null)
@@ -37,13 +35,11 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(customer);
         }
 
-        // GET: Customer/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Customer/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Customer customer)
@@ -57,7 +53,6 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(customer);
         }
 
-        // GET: Customer/Edit/5
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -70,7 +65,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(customer);
         }
 
-        // POST: Customer/Edit/5
+ 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Customer customer)
@@ -97,7 +92,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(customer);
         }
 
-        // GET: Customer/Delete/5
+  
         public IActionResult Delete(int? id)
         {
             if (id == null)
@@ -110,7 +105,6 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(customer);
         }
 
-        // POST: Customer/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)

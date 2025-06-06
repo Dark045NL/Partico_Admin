@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-
-namespace DataAccessLayer.Models
+﻿namespace DataAccessLayer.Models
 {
     public class Order
     {

@@ -79,7 +79,6 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         {
             if (id != order.Id) return NotFound();
 
-            // Exclude properties that won't be bound via the form
             ModelState.Remove(nameof(order.Customer));
             ModelState.Remove(nameof(order.Products));
 
