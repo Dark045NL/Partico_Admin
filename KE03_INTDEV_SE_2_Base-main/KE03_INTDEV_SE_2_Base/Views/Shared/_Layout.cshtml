@@ -20,25 +20,37 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Dashboard</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                Dashboard
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                                <li><a class="dropdown-item" asp-controller="Stats" asp-action="Index">Statistieken</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Customer" asp-action="Index">Klanten</a>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                Beheer
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-controller="Customer" asp-action="Index">Klanten</a></li>
+                                <li><a class="dropdown-item" asp-controller="Order" asp-action="Index">Orders</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Product" asp-action="Index">Producten</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Order" asp-action="Index">Orders</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Part" asp-action="Index">Onderdelen</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Stats" asp-action="Index">Statistieken</a>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                Productie
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">Producten</a></li>
+                                <li><a class="dropdown-item" asp-controller="Part" asp-action="Index">Onderdelen</a></li>
+                            </ul>
                         </li>
                     </ul>
+
 
                     <div class="d-flex align-items-center">
                         @await Html.PartialAsync("_SearchPartial", new SearchViewModel())
