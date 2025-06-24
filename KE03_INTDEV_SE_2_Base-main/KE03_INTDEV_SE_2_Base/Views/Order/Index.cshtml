@@ -13,19 +13,35 @@
         <tr>
             <th>Datum</th>
             <th>Klant</th>
+            <th>Producten</th>
             <th>Acties</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var order in Model)
         {
             <tr>
-                <td>@item.OrderDate.ToShortDateString()</td>
-                <td>@item.Customer?.Name</td>
+                <td>@order.OrderDate.ToShortDateString()</td>
+                <td>@order.Customer?.Name</td>
                 <td>
-                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id">✏️ Bewerken</a>
-                    <a class="btn btn-sm btn-info text-white" asp-action="Details" asp-route-id="@item.Id">🔍 Details</a>
-                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id">🗑️ Verwijder</a>
+                    @if (order.OrderProducts.Any())
+                    {
+                        <ul class="mb-0">
+                            @foreach (var op in order.OrderProducts)
+                            {
+                                <li>@op.Product.Name (@op.Quantity st.)</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Geen producten</span>
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@order.Id">✏️ Bewerken</a>
+                    <a class="btn btn-sm btn-info text-white" asp-action="Details" asp-route-id="@order.Id">🔍 Details</a>
+                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@order.Id">🗑️ Verwijder</a>
                 </td>
             </tr>
         }

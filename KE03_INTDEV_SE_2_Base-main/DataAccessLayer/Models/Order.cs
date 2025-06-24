@@ -10,7 +10,9 @@
 
         public Customer Customer { get; set; } = null!;
 
-        public ICollection<Product> Products { get; } = new List<Product>();
+        public ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
+
+
     }
 
 }

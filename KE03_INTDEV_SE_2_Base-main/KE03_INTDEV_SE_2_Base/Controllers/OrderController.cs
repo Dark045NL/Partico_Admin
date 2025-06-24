@@ -1,8 +1,10 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Models;
+using KE03_INTDEV_SE_2_Base.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace KE03_INTDEV_SE_2_Base.Controllers
 {
@@ -20,7 +22,11 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
 
         public IActionResult Index()
         {
-            var orders = _orderRepo.GetAllOrders();
+            var orders = _context.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+                .ToList();
             return View(orders);
         }
 
@@ -36,29 +42,54 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Customers = _context.Customers.ToList();
-            return View();
+            var viewModel = new OrderViewModel
+            {
+                Customers = _context.Customers.ToList(),
+                Products = _context.Products
+                    .Where(p => p.Active)
+                    .Select(p => new ProductSelection
+                    {
+                        ProductId = p.Id,
+                        Name = p.Name,
+                        Quantity = 0
+                    }).ToList(),
+                OrderDate = DateTime.Today
+            };
+
+            return View(viewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Order order)
+        public IActionResult Create(OrderViewModel viewModel)
         {
-
-            ModelState.Remove(nameof(order.Customer));
-            ModelState.Remove(nameof(order.Products));
-
             if (!ModelState.IsValid)
             {
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    Console.WriteLine("ModelState Error: " + error.ErrorMessage);
-                }
-
-                ViewBag.Customers = _context.Customers.ToList();
-                return View(order);
+                viewModel.Customers = _context.Customers.ToList();
+                return View(viewModel);
             }
 
-            _orderRepo.AddOrder(order);
+            var order = new Order
+            {
+                OrderDate = viewModel.OrderDate,
+                CustomerId = viewModel.CustomerId
+            };
+
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+
+            foreach (var product in viewModel.Products.Where(p => p.Quantity > 0))
+            {
+                var orderProduct = new OrderProduct
+                {
+                    OrderId = order.Id,
+                    ProductId = product.ProductId,
+                    Quantity = product.Quantity
+                };
+                _context.OrderProducts.Add(orderProduct);
+            }
+
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
@@ -66,30 +97,57 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         {
             if (id == null) return NotFound();
 
-            var order = _orderRepo.GetOrderById(id.Value);
+            var order = _context.Orders
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+                .FirstOrDefault(o => o.Id == id);
+
             if (order == null) return NotFound();
 
             ViewBag.Customers = _context.Customers.ToList();
+            ViewBag.Products = _context.Products.ToList();
             return View(order);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Order order)
+        public IActionResult Edit(int id, Order order, int[] selectedProductIds, int[] quantities)
         {
             if (id != order.Id) return NotFound();
 
             ModelState.Remove(nameof(order.Customer));
-            ModelState.Remove(nameof(order.Products));
+            ModelState.Remove(nameof(order.OrderProducts));
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                ViewBag.Customers = _context.Customers.ToList();
-                return View(order);
+                var existingOrder = _context.Orders
+                    .Include(o => o.OrderProducts)
+                    .FirstOrDefault(o => o.Id == id);
+
+                if (existingOrder == null) return NotFound();
+
+                existingOrder.OrderDate = order.OrderDate;
+                existingOrder.CustomerId = order.CustomerId;
+
+                // ✅ Clear + re-add producten
+                existingOrder.OrderProducts.Clear();
+                for (int i = 0; i < selectedProductIds.Length; i++)
+                {
+                    existingOrder.OrderProducts.Add(new OrderProduct
+                    {
+                        OrderId = id,
+                        ProductId = selectedProductIds[i],
+                        Quantity = quantities[i]
+                    });
+                }
+
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
             }
 
-            _orderRepo.UpdateOrder(order);
-            return RedirectToAction(nameof(Index));
+            ViewBag.Customers = _context.Customers.ToList();
+            ViewBag.Products = _context.Products.ToList();
+            return View(order);
         }
 
         public IActionResult Delete(int? id)

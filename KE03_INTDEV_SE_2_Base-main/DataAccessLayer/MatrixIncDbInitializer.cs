@@ -32,13 +32,60 @@ namespace DataAccessLayer
                 };
 
                 context.Customers.AddRange(customers);
-                context.SaveChanges(); // 📌 Nodig vóór orders
+                context.SaveChanges();
+            }
+
+            // 🛠️ Producten geïnspireerd op de Matrix
+            if (!context.Products.Any())
+            {
+                var products = new Product[]
+                {
+                    new Product
+                    {
+                        Name = "Nebuchadnezzar",
+                        Description = "Hovercraft waarmee Morpheus en crew opereren buiten de Matrix",
+                        Price = 10000.00m,
+                        Active = true
+                    },
+                    new Product
+                    {
+                        Name = "Jack-in Chair",
+                        Description = "Stoel waarmee crewleden ingeplugd worden in de Matrix",
+                        Price = 500.50m,
+                        Active = true
+                    },
+                    new Product
+                    {
+                        Name = "EMP Device",
+                        Description = "Electro-Magnetic Pulse wapen dat Sentinels uitschakelt",
+                        Price = 129.99m,
+                        Active = true
+                    }
+                };
+
+                context.Products.AddRange(products);
+                context.SaveChanges();
+            }
+
+            // 🔩 Onderdelen voor sci-fi toepassingen
+            if (!context.Parts.Any())
+            {
+                var parts = new Part[]
+                {
+                    new Part { Name = "Tandwiel", Description = "Voor overbrenging van kracht in motoren en deuren", Active = true },
+                    new Part { Name = "M5 Boutje", Description = "Bevestigt panelen in hovercrafts zoals de Nebuchadnezzar", Active = true },
+                    new Part { Name = "Hydraulische cilinder", Description = "Voor het openen van zware luchtsluizen", Active = true },
+                    new Part { Name = "Koelvloeistofpomp", Description = "Koelt energie-units aan boord van schepen", Active = true }
+                };
+
+                context.Parts.AddRange(parts);
+                context.SaveChanges();
             }
 
             // 🛒 Orders aan klanten koppelen
             if (!context.Orders.Any())
             {
-                var customers = context.Customers.ToList(); // Nu gevuld door vorige SaveChanges()
+                var customers = context.Customers.ToList();
 
                 var orders = new Order[]
                 {
@@ -52,47 +99,22 @@ namespace DataAccessLayer
                 context.SaveChanges();
             }
 
-            // 🛠️ Producten geïnspireerd op de Matrix
-            if (!context.Products.Any())
+            // 🧾 OrderProduct-koppelingen met hoeveelheden
+            if (!context.OrderProducts.Any())
             {
-                var products = new Product[]
+                var orders = context.Orders.ToList();
+                var products = context.Products.ToList();
+
+                var orderProducts = new OrderProduct[]
                 {
-                    new Product
-                    {
-                        Name = "Nebuchadnezzar",
-                        Description = "Hovercraft waarmee Morpheus en crew opereren buiten de Matrix",
-                        Price = 10000.00m
-                    },
-                    new Product
-                    {
-                        Name = "Jack-in Chair",
-                        Description = "Stoel waarmee crewleden ingeplugd worden in de Matrix",
-                        Price = 500.50m
-                    },
-                    new Product
-                    {
-                        Name = "EMP Device",
-                        Description = "Electro-Magnetic Pulse wapen dat Sentinels uitschakelt",
-                        Price = 129.99m
-                    }
+                    new OrderProduct { OrderId = orders[0].Id, ProductId = products[0].Id, Quantity = 2 },
+                    new OrderProduct { OrderId = orders[0].Id, ProductId = products[1].Id, Quantity = 1 },
+                    new OrderProduct { OrderId = orders[1].Id, ProductId = products[2].Id, Quantity = 3 },
+                    new OrderProduct { OrderId = orders[2].Id, ProductId = products[0].Id, Quantity = 1 },
+                    new OrderProduct { OrderId = orders[3].Id, ProductId = products[1].Id, Quantity = 2 }
                 };
 
-                context.Products.AddRange(products);
-                context.SaveChanges();
-            }
-
-            // 🔩 Onderdelen voor sci-fi toepassingen
-            if (!context.Parts.Any())
-            {
-                var parts = new Part[]
-                {
-                    new Part { Name = "Tandwiel", Description = "Voor overbrenging van kracht in motoren en deuren" },
-                    new Part { Name = "M5 Boutje", Description = "Bevestigt panelen in hovercrafts zoals de Nebuchadnezzar" },
-                    new Part { Name = "Hydraulische cilinder", Description = "Voor het openen van zware luchtsluizen" },
-                    new Part { Name = "Koelvloeistofpomp", Description = "Koelt energie-units aan boord van schepen" }
-                };
-
-                context.Parts.AddRange(parts);
+                context.OrderProducts.AddRange(orderProducts);
                 context.SaveChanges();
             }
         }

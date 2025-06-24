@@ -1,31 +1,57 @@
-﻿@model DataAccessLayer.Models.Order
+﻿@model KE03_INTDEV_SE_2_Base.Models.OrderViewModel
 
 @{
-    ViewData["Title"] = "Nieuwe bestelling";
+    ViewData["Title"] = "Nieuwe Order";
 }
 
-<h1>➕ Nieuwe bestelling</h1>
+<h2>Nieuwe Order</h2>
+<hr />
 
 <form asp-action="Create" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-    <div class="form-group mb-3">
-        <label asp-for="OrderDate" class="form-label"></label>
-        <input asp-for="OrderDate" type="date" class="form-control" />
-        <span asp-validation-for="OrderDate" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mb-3">
+    <div class="mb-3">
         <label asp-for="CustomerId" class="form-label">Klant</label>
-        <select asp-for="CustomerId" class="form-control"
-                asp-items="@(new SelectList(ViewBag.Customers, "Id", "Name"))">
+        <select asp-for="CustomerId" class="form-select" asp-items="@(new SelectList(Model.Customers, "Id", "Name"))">
             <option value="">-- Selecteer een klant --</option>
         </select>
         <span asp-validation-for="CustomerId" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-success">Opslaan</button>
-    <a asp-action="Index" class="btn btn-secondary">Annuleren</a>
+    <div class="mb-3">
+        <label asp-for="OrderDate" class="form-label">Besteldatum</label>
+        <input asp-for="OrderDate" class="form-control" />
+        <span asp-validation-for="OrderDate" class="text-danger"></span>
+    </div>
+
+    <h5 class="mt-4">Producten</h5>
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Product</th>
+                    <th style="width: 150px;">Aantal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Products.Count; i++)
+                {
+                    <tr>
+                        <td>@Model.Products[i].Name</td>
+                        <td>
+                            <input asp-for="Products[@i].Quantity" class="form-control" type="number" min="0" />
+                            <input type="hidden" asp-for="Products[@i].ProductId" />
+                            <input type="hidden" asp-for="Products[@i].Name" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Order aanmaken</button>
+    </div>
 </form>
 
 @section Scripts {

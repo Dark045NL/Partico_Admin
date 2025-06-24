@@ -17,28 +17,33 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Get orders per customer
+            // Bestellingen per klant
             var ordersPerCustomer = await _context.Customers
                 .Select(c => new
                 {
-                    CustomerName = c.Name,
-                    OrderCount = c.Orders.Count
+                    customerName = c.Name,
+                    orderCount = c.Orders.Count
                 })
                 .ToListAsync();
 
-            // Get product order statistics
+            // Aantal bestellingen per product + omzet (aantal * prijs)
             var productStats = await _context.Products
                 .Select(p => new
                 {
-                    ProductName = p.Name,
-                    OrderCount = p.Orders.Count,
-                    Price = p.Price
+                     ProductName = p.Name,
+                        OrderCount = p.OrderProducts.Sum(op => (int?)op.Quantity) ?? 0,
+                        Price = p.Price,
+                        Revenue = (p.OrderProducts.Sum(op => (int?)op.Quantity) ?? 0) * p.Price
                 })
                 .OrderByDescending(p => p.OrderCount)
                 .ToListAsync();
 
+            // Omzet per maand (optioneel dummy)
+            var monthlyRevenue = new[] { 12500, 15000, 11000, 13500, 16500, 18000 };
+
             ViewBag.OrdersPerCustomer = ordersPerCustomer;
             ViewBag.ProductStats = productStats;
+            ViewBag.MonthlyRevenue = monthlyRevenue;
 
             return View();
         }
