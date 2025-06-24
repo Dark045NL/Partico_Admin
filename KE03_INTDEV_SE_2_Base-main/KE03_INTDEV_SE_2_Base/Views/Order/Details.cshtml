@@ -1,35 +1,65 @@
 ﻿@model DataAccessLayer.Models.Order
 
 @{
-    ViewData["Title"] = "Bestelgegevens";
+    ViewData["Title"] = "Bestelling Details";
 }
 
-<h1>🧾 Bestelling Details</h1>
+<h1 class="mb-4">📄 Bestelling Details</h1>
 
-<dl class="row">
-    <dt class="col-sm-2">Datum</dt>
-    <dd class="col-sm-10">@Model.OrderDate.ToShortDateString()</dd>
+<div class="card mb-4">
+    <div class="card-header fw-bold">
+        Bestelinformatie
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Datum</dt>
+            <dd class="col-sm-9">@Model.OrderDate.ToShortDateString()</dd>
 
-    <dt class="col-sm-2">Klant</dt>
-    <dd class="col-sm-10">@Model.Customer?.Name</dd>
+            <dt class="col-sm-3">Klant</dt>
+            <dd class="col-sm-9">@Model.Customer?.Name</dd>
+        </dl>
+    </div>
+</div>
 
-    <dt class="col-sm-2">Producten</dt>
-    <dd class="col-sm-10">
-        @if (Model.OrderProducts.Any())
-        {
-            <ul>
-                @foreach (var item in Model.OrderProducts)
-                {
-                    <li>@item.Product.Name - @item.Quantity stuks</li>
-                }
-            </ul>
-        }
-        else
-        {
-            <span class="text-muted">Geen producten gekoppeld</span>
-        }
-    </dd>
-</dl>
+@if (Model.OrderProducts != null && Model.OrderProducts.Any())
+{
+    <div class="card mb-4">
+        <div class="card-header fw-bold">
+            🛒 Producten in deze bestelling
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Productnaam</th>
+                        <th>Prijs</th>
+                        <th>Aantal</th>
+                        <th>Totaal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var op in Model.OrderProducts)
+                    {
+                        <tr>
+                            <td>@op.Product?.Name</td>
+                            <td>€@op.Product?.Price.ToString("N2")</td>
+                            <td>@op.Quantity</td>
+                            <td>€@(op.Product != null ? (op.Product.Price * op.Quantity).ToString("N2") : "n.v.t.")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        Deze bestelling bevat geen producten.
+    </div>
+}
 
-<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">✏️ Bewerken</a>
-<a asp-action="Index" class="btn btn-secondary">⬅️ Terug</a>
+<div>
+    <a class="btn btn-secondary" asp-action="Index">⬅️ Terug naar overzicht</a>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">✏️ Bewerken</a>
+</div>

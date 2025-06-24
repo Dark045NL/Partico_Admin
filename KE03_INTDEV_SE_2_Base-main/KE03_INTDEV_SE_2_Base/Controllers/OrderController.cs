@@ -34,7 +34,12 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         {
             if (id == null) return NotFound();
 
-            var order = _orderRepo.GetOrderById(id.Value);
+            var order = _context.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.OrderProducts)
+                    .ThenInclude(op => op.Product)
+                .FirstOrDefault(o => o.Id == id);
+
             if (order == null) return NotFound();
 
             return View(order);
