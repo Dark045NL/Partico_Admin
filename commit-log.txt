@@ -1,3 +1,9 @@
+bb95eb8 - Dark045 - Update Order Page
+585646f - Jelle S - rework
+6f81b99 - Dark045 - Update _Layout.cshtml
+0eb3584 - Dark045 - Footer naar de onderkant
+4b4a12f - Dark045 - update index
+20cc10a - Dark045 - update commitlog
 52157fa - Dark045 - Update styling
 1229580 - Dark045 - update en fix edit en active modifier
 fb6b1be - Dark045 - Merge branch 'main' of https://github.com/Dark045NL/Partico_Admin
