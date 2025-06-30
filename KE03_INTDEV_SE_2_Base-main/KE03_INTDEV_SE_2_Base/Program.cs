@@ -4,7 +4,7 @@ using DataAccessLayer.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
-namespace KE03_INTDEV_SE_2_Base
+namespace Partico_Panel
 {
     public class Program
     {

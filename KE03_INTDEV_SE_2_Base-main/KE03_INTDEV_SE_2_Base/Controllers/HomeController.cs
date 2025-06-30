@@ -1,18 +1,13 @@
-using KE03_INTDEV_SE_2_Base.Models;
+using Partico_Panel.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace KE03_INTDEV_SE_2_Base.Controllers
+namespace Partico_Panel.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(ILogger<HomeController> logger) : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<HomeController> _logger = logger;
 
         [Authorize(Roles = "Admin")]
         public IActionResult Index()

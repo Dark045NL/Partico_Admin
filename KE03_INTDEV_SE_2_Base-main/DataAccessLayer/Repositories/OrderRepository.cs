@@ -4,14 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.Repositories
 {
-    public class OrderRepository : IOrderRepository
+    public class OrderRepository(MatrixIncDbContext context) : IOrderRepository
     {
-        private readonly MatrixIncDbContext _context;
-
-        public OrderRepository(MatrixIncDbContext context)
-        {
-            _context = context;
-        }
+        private readonly MatrixIncDbContext _context = context;
 
         public void AddOrder(Order order)
         {

@@ -1,24 +1,18 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Models;
-using KE03_INTDEV_SE_2_Base.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Partico_Panel.Models;
 
-namespace KE03_INTDEV_SE_2_Base.Controllers
+namespace Partico_Panel.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class OrderController : Controller
+    public class OrderController(IOrderRepository orderRepo, MatrixIncDbContext context) : Controller
     {
-        private readonly IOrderRepository _orderRepo;
-        private readonly MatrixIncDbContext _context;
-
-        public OrderController(IOrderRepository orderRepo, MatrixIncDbContext context)
-        {
-            _orderRepo = orderRepo;
-            _context = context;
-        }
+        private readonly IOrderRepository _orderRepo = orderRepo;
+        private readonly MatrixIncDbContext _context = context;
 
         public IActionResult Index()
         {
@@ -49,15 +43,15 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         {
             var viewModel = new OrderViewModel
             {
-                Customers = _context.Customers.ToList(),
-                Products = _context.Products
+                Customers = [.. _context.Customers],
+                Products = [.. _context.Products
                     .Where(p => p.Active)
                     .Select(p => new ProductSelection
                     {
                         ProductId = p.Id,
                         Name = p.Name,
                         Quantity = 0
-                    }).ToList(),
+                    })],
                 OrderDate = DateTime.Today
             };
 
@@ -70,7 +64,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         {
             if (!ModelState.IsValid)
             {
-                viewModel.Customers = _context.Customers.ToList();
+                viewModel.Customers = [.. _context.Customers];
                 return View(viewModel);
             }
 

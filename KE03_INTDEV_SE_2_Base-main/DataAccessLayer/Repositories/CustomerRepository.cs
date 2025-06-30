@@ -4,14 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.Repositories
 {
-    public class CustomerRepository : ICustomerRepository
+    public class CustomerRepository(MatrixIncDbContext context) : ICustomerRepository
     {
-        private readonly MatrixIncDbContext _context;
-
-        public CustomerRepository(MatrixIncDbContext context)
-        {
-            _context = context;
-        }
+        private readonly MatrixIncDbContext _context = context;
 
         public void AddCustomer(Customer customer)
         {

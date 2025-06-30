@@ -4,14 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.Repositories
 {
-    public class ProductRepository : IProductRepository
+    public class ProductRepository(MatrixIncDbContext context) : IProductRepository
     {
-        private readonly MatrixIncDbContext _context;
+        private readonly MatrixIncDbContext _context = context;
 
-        public ProductRepository(MatrixIncDbContext context)
-        {
-            _context = context;
-        }
         public void AddProduct(Product product)
         {
             _context.Products.Add(product);

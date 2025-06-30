@@ -16,8 +16,9 @@
             <th>Naam</th>
             <th>Beschrijving</th>
             <th>Prijs</th>
+            <th>Onderdelen</th>
             <th>Actief</th>
-            <th></th>
+            <th>Acties</th>
         </tr>
     </thead>
     <tbody>
@@ -26,7 +27,22 @@
             <tr>
                 <td>@item.Name</td>
                 <td>@item.Description</td>
-                <td>€@item.Price</td>
+                <td>€@item.Price.ToString("N2")</td>
+                <td>
+                    @if (item.Parts != null && item.Parts.Any())
+                    {
+                        <ul class="mb-0 ps-3">
+                            @foreach (var part in item.Parts)
+                            {
+                                <li>@part.Name</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Geen onderdelen</span>
+                    }
+                </td>
                 <td>@(item.Active ? "✅" : "❌")</td>
                 <td>
                     <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id">✏️ Bewerken</a>

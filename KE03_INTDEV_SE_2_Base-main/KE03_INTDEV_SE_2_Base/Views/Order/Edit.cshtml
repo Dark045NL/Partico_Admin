@@ -4,7 +4,7 @@
     var selectedProducts = Model.OrderProducts?.ToDictionary(p => p.ProductId, p => p.Quantity) ?? new();
 }
 
-<h1>✏️ Bewerk Bestelling</h1>
+<h1>Bewerk Bestelling</h1>
 
 <form asp-action="Edit" method="post">
     <input type="hidden" asp-for="Id" />

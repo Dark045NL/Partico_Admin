@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace KE03_INTDEV_SE_2_Base.Models
+namespace Partico_Panel.Models
 {
     public class LoginViewModel
     {

@@ -3,73 +3,121 @@ using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Partico_Panel.Models;
 
-namespace KE03_INTDEV_SE_2_Base.Controllers
+namespace Partico_Panel.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class ProductController : Controller
+    public class ProductController(MatrixIncDbContext context) : Controller
     {
-        private readonly MatrixIncDbContext _context;
+        private readonly MatrixIncDbContext _context = context;
 
-        public ProductController(MatrixIncDbContext context)
+        public IActionResult Index()
         {
-            _context = context;
-        }
+            var products = _context.Products
+                .Include(p => p.Parts)
+                .ToList();
 
-        public IActionResult Index() => View(_context.Products.ToList());
+            return View(products);
+        }
 
         public IActionResult Details(int? id)
         {
             if (id == null) return NotFound();
-            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+            var product = _context.Products
+                .Include(p => p.Parts)
+                .FirstOrDefault(p => p.Id == id);
             if (product == null) return NotFound();
             return View(product);
         }
 
-        public IActionResult Create() => View();
+        public IActionResult Create()
+        {
+            var viewModel = new ProductViewModel
+            {
+                AllParts = _context.Parts.ToList()
+            };
+
+            return View(viewModel);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Product product)
+        public IActionResult Create(ProductViewModel vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Products.Add(product);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                vm.AllParts = _context.Parts.ToList();
+                return View(vm);
             }
-            return View(product);
+
+            var product = new Product
+            {
+                Name = vm.Name,
+                Description = vm.Description,
+                Price = vm.Price,
+                Active = vm.Active
+            };
+
+            foreach (var part in _context.Parts.Where(p => vm.SelectedPartIds.Contains(p.Id)))
+            {
+                product.Parts.Add(part);
+            }
+
+            _context.Products.Add(product);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int id)
         {
-            if (id == null) return NotFound();
-            var product = _context.Products.Find(id);
+            var product = _context.Products
+                .Include(p => p.Parts)
+                .FirstOrDefault(p => p.Id == id);
             if (product == null) return NotFound();
-            return View(product);
+
+            var vm = new ProductViewModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Active = product.Active,
+                SelectedPartIds = [.. product.Parts.Select(p => p.Id)],
+                AllParts = [.. _context.Parts]
+            };
+
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Product product)
+        public IActionResult Edit(ProductViewModel vm)
         {
-            if (id != product.Id) return NotFound();
-
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(product);
-                    _context.SaveChanges();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Products.Any(p => p.Id == id)) return NotFound();
-                    throw;
-                }
-                return RedirectToAction(nameof(Index));
+                vm.AllParts = [.. _context.Parts];
+                return View(vm);
             }
-            return View(product);
+
+            var product = _context.Products
+                .Include(p => p.Parts)
+                .FirstOrDefault(p => p.Id == vm.Id);
+            if (product == null) return NotFound();
+
+            product.Name = vm.Name;
+            product.Description = vm.Description;
+            product.Price = vm.Price;
+            product.Active = vm.Active;
+
+            product.Parts.Clear();
+            foreach (var part in _context.Parts.Where(p => vm.SelectedPartIds.Contains(p.Id)))
+            {
+                product.Parts.Add(part);
+            }
+
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Delete(int? id)

@@ -3,12 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer
 {
-    public class MatrixIncDbContext : DbContext
+    public class MatrixIncDbContext(DbContextOptions<MatrixIncDbContext> options) : DbContext(options)
     {
-        public MatrixIncDbContext(DbContextOptions<MatrixIncDbContext> options) : base(options)
-        {
-        }
-
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -31,6 +27,7 @@ namespace DataAccessLayer
             modelBuilder.Entity<Part>()
                 .HasMany(p => p.Products)
                 .WithMany(p => p.Parts);
+
 
             // Relatie: Product N:M Order via OrderProduct
             modelBuilder.Entity<OrderProduct>()

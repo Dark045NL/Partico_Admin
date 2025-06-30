@@ -1,20 +1,15 @@
 using DataAccessLayer;
-using KE03_INTDEV_SE_2_Base.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Partico_Panel.Models;
 
-namespace KE03_INTDEV_SE_2_Base.Controllers
+namespace Partico_Panel.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class SearchController : Controller
+    public class SearchController(MatrixIncDbContext context) : Controller
     {
-        private readonly MatrixIncDbContext _context;
-
-        public SearchController(MatrixIncDbContext context)
-        {
-            _context = context;
-        }
+        private readonly MatrixIncDbContext _context = context;
 
         [HttpGet]
         public async Task<IActionResult> Search(string query)

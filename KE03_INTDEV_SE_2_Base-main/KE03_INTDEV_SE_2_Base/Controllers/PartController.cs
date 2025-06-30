@@ -4,17 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace KE03_INTDEV_SE_2_Base.Controllers
+namespace Partico_Panel.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class PartController : Controller
+    public class PartController(MatrixIncDbContext context) : Controller
     {
-        private readonly MatrixIncDbContext _context;
-
-        public PartController(MatrixIncDbContext context)
-        {
-            _context = context;
-        }
+        private readonly MatrixIncDbContext _context = context;
 
         public IActionResult Index() => View(_context.Parts.ToList());
 

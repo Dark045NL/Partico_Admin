@@ -3,17 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace KE03_INTDEV_SE_2_Base.Controllers
+namespace Partico_Panel.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class StatsController : Controller
+    public class StatsController(MatrixIncDbContext context) : Controller
     {
-        private readonly MatrixIncDbContext _context;
-
-        public StatsController(MatrixIncDbContext context)
-        {
-            _context = context;
-        }
+        private readonly MatrixIncDbContext _context = context;
 
         public async Task<IActionResult> Index()
         {
@@ -32,7 +27,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
                 {
                      ProductName = p.Name,
                         OrderCount = p.OrderProducts.Sum(op => (int?)op.Quantity) ?? 0,
-                        Price = p.Price,
+                        p.Price,
                         Revenue = (p.OrderProducts.Sum(op => (int?)op.Quantity) ?? 0) * p.Price
                 })
                 .OrderByDescending(p => p.OrderCount)

@@ -3,14 +3,9 @@
 
 namespace DataAccessLayer.Repositories
 {
-    public class UserRepository
+    public class UserRepository(MatrixIncDbContext context)
     {
-        private readonly MatrixIncDbContext _context;
-
-        public UserRepository(MatrixIncDbContext context)
-        {
-            _context = context;
-        }
+        private readonly MatrixIncDbContext _context = context;
 
         public User? GetByCredentials(string username, string password)
         {

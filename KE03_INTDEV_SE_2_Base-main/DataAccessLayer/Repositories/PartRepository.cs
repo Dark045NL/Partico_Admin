@@ -3,14 +3,9 @@ using DataAccessLayer.Models;
 
 namespace DataAccessLayer.Repositories
 {
-    public class PartRepository : IPartRepository
+    public class PartRepository(MatrixIncDbContext context) : IPartRepository
     {
-        private readonly MatrixIncDbContext _context;
-
-        public PartRepository(MatrixIncDbContext context)
-        {
-            _context = context;
-        }
+        private readonly MatrixIncDbContext _context = context;
 
         public void AddPart(Part part)
         {
